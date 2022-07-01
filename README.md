@@ -117,9 +117,7 @@ join  连接:    连接表，会全部拼接到查询语句中
   // 		LEFT JOIN priority ON issues.pid=priority.id
   // GROUP BY issues.id,label,priority_name
   i, _ = repository.Select().
-```
- 分组之后返回字段需要修改，括号依次是 分组，修改返回字段，一行返回结果的处理
-  ```
+ // 分组之后返回字段需要修改，括号依次是 分组，修改返回字段，一行返回结果的处理
   Group("issues.id,label,priority_name")("issues.id,label,priority_name,Min(uid)")(
   	func(s ...string) interface{} {
   		return nil
