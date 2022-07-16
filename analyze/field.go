@@ -6,6 +6,7 @@ import "reflect"
 type Field struct {
 	Kind      reflect.Kind // 数据类型（种类）
 	TableName string       // 所属表名字
+	Name      string       // 属性名（原名）
 	FieldName string       // 数据库对应字段名字
 }
 

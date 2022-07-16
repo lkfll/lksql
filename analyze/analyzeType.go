@@ -127,7 +127,8 @@ func fieldNameToSqlField(name string) string {
 func (analyze *AnalyzeType) analyzeField(field *reflect.StructField) *Field {
 	// 内联函数
 	setRet := func(ret *Field) {
-		ret.Kind = field.Type.Kind()                        // 数据类型（种类）
+		ret.Kind = field.Type.Kind() // 数据类型（种类）
+		ret.Name = field.Name
 		if name, ok := field.Tag.Lookup(FieldNameTag); ok { // 写明啦标签
 			ret.FieldName = name // 字段名
 		} else { // 没有标签 默认使用字段名字 大写改下划线

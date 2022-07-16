@@ -33,20 +33,22 @@ var Hook_QueryGoAfter func([]interface{}, error) = func(i []interface{}, err err
 // (10) limit
 type Query struct {
 	IsGroup bool // 是否是分组查询
-	RowNum  int  // 一行数量
+
+	RowNum int // 一行数量
 
 	basesql.SelectSql // 查询结构体
 
 	_scanHandle ScanHandle // 扫描方法
-
+	scan        *Scan      // 扫描
 }
 
 // 构造函数
-func NewQuery(selectSql basesql.SelectSql, scanHandle ScanHandle) *Query {
+func NewQuery(selectSql basesql.SelectSql, scan *Scan) *Query {
 	var ret Query
 	ret.IsGroup = false // 默认不是分组查询
 	ret.SelectSql = selectSql
-	ret._scanHandle = scanHandle
+	ret._scanHandle = nil
+	ret.scan = scan
 	return &ret
 }
 
@@ -87,6 +89,9 @@ func (query *Query) MakeSql() {
 
 // 扫描rows分析
 func (query *Query) Scan(rows *sql.Rows) ([]interface{}, error) {
+	if query._scanHandle == nil { // 没有扫描处理方法，参用默认扫描
+		return query.scan.ScanHandle(rows)
+	}
 	query.RowNum = len(strings.Split(query.SqlClause_Select, ",")) // 设置一行的数量
 	ret := make([]interface{}, 0)
 	for rows.Next() { // 逐行扫描
@@ -182,6 +187,7 @@ func (query *Query) Having(SqlClause_Having string) *Query {
 // 设置扫描处理方法
 // 不建议直接使用
 func (query *Query) SetScanHandle(s ScanHandle) *Query {
+
 	query._scanHandle = s
 	return query
 }

@@ -3,7 +3,6 @@ package test
 import (
 	"database/sql"
 	"fmt"
-	"strconv"
 	"testing"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -25,19 +24,6 @@ type Issues struct {
 	Uid          int    //`table:"issues" field:"uid"`
 }
 
-// 结果分析调用 查询结果的一行进行赋值创建issues对象
-// 顺序和字段issues对象字段顺序一样
-func (issues Issues) ArrayOf(b ...string) interface{} {
-	var ret Issues
-	ret.Id, _ = strconv.Atoi(b[0])
-	ret.IssuesName = b[1]
-	ret.Label = b[2]
-	ret.Description = b[3]
-	ret.Uid, _ = strconv.Atoi(b[4])
-	ret.PriorityName = b[5]
-	return ret
-}
-
 // issues转为map
 func (i Issues) ToMap() map[string]interface{} {
 	m := make(map[string]interface{})
@@ -52,7 +38,9 @@ func (i Issues) ToMap() map[string]interface{} {
 
 func TestXxx(t *testing.T) {
 	// fmt.Printf("\"\": %v\n", "")
-	DB, _ := sql.Open("mysql", "dsn")
+	DB, _ := sql.Open("mysql", "ll:123456@tcp(43.134.235.176:3306)/llblog")
+	DB.SetMaxIdleConns(1)
+	DB.SetMaxOpenConns(1)
 	// DefaultFacory 默认删除啦增加修改sql的主键字段
 	repository, err := lksql.DefaultFacory(Issues{})
 	if err != nil {
