@@ -27,7 +27,7 @@ func (delete *Delete) Where(SqlClause_Where string) *Delete {
 
 // 执行
 func (delete *Delete) Go(db SQLCommon, param ...interface{}) (sql.Result, error) {
-	delete.Sql = fmt.Sprint(delete.Sql, ";")
+	delete.Sql = fmt.Sprint(delete.Sql, "\n", delete.SqlClause_Where, ";")
 	return db.Exec(delete.Sql, param...)
 }
 
