@@ -3,11 +3,13 @@ package server
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/lkfll/lksql/server/controller"
 )
 
 // 启动服务器
 func Run() {
-	var html Html
+	var html controller.Html
 	http.HandleFunc("/", html.Index)
 	http.HandleFunc("/index", html.Index)
 	http.HandleFunc("/tables", Tables)

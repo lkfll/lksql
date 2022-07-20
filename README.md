@@ -1,7 +1,8 @@
-# orm
+# llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
 
-分为dto entry两种
-分离
+反射优化
+dtoRepository insertGo 优化
+// TODO 考虑 dto包含多个entity
 
 #### 介绍
 拼接sql语句

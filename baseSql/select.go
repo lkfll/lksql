@@ -38,14 +38,14 @@ const SelectSQL string = // 查询语句
 	"%s\n" //   limit 分页
 // 创建查询basesql
 // return: sql语句模板，select子句，表名，连接子句
-func CreateSelectSQL(ana *analyze.AnalyzeType, fields ...*analyze.Field) SelectSql {
+func CreateSelectSQL(tableName string, JoinSqls []string, fields []*analyze.Field) SelectSql {
 	var ret SelectSql
 	ret.Sql = SelectSQL // 查询语句模板
 
 	// 连接子句
 	joins := ""
-	for _, jf := range ana.Join {
-		joins = fmt.Sprintf("\t%s%s\n", joins, jf.JoinSql)
+	for _, JoinSql := range JoinSqls {
+		joins = fmt.Sprintf("\t%s%s\n", joins, JoinSql)
 	}
 	ret.SqlClause_Join = joins
 
@@ -59,7 +59,7 @@ func CreateSelectSQL(ana *analyze.AnalyzeType, fields ...*analyze.Field) SelectS
 	ret.SqlClause_Select = retFields[:len(retFields)-2]
 
 	// 表名 form子句
-	ret.SqlClause_Form = ana.Key.TableName
+	ret.SqlClause_Form = tableName
 
 	return ret
 }

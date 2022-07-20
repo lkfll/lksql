@@ -1,16 +1,30 @@
-package server
+package ddl
 
 import (
 	"database/sql"
 	"fmt"
 )
 
+// r, err := ddl.DB.Query(fmt.Sprintf(DeseDDL, table))
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	ct, _ := r.ColumnTypes()
+// 	for _, v := range ct {
+// 		fmt.Printf("v.DatabaseTypeName(): %v\n", v.DatabaseTypeName())
+// 	}
+// 	fmt.Println(r.Columns())
+
 type DDL struct {
 	DB sql.DB
 }
 
-// 扫描成string切片
-func scanOfStringlist(r *sql.Rows, err error) ([]string, error) {
+// 显示数据库中的表
+const ShowTableDDL = "show tables;"
+
+func (ddl *DDL) ShowTables() ([]string, error) {
+	// lksql.
+	r, err := ddl.DB.Query(ShowTableDDL)
 	if err != nil {
 		return nil, err
 	}
@@ -24,18 +38,13 @@ func scanOfStringlist(r *sql.Rows, err error) ([]string, error) {
 	return ret, nil
 }
 
-// 显示数据库中的表
-const ShowTableDDL = "show tables;"
-
-func (ddl *DDL) ShowTables() ([]string, error) {
-	return scanOfStringlist(ddl.DB.Query(ShowTableDDL))
-}
-
 // 查看表
 const DeseDDL = "desc %s;"
 
 func (ddl *DDL) DeseTable(table string) ([]string, error) {
-	return scanOfStringlist(ddl.DB.Query(fmt.Sprintf(DeseDDL, table)))
+
+	// defer r.Close()
+	return nil, nil
 }
 
 // 创建表
