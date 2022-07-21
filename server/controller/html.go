@@ -11,7 +11,7 @@ type Html struct {
 }
 
 func (html *Html) Index(w http.ResponseWriter, r *http.Request) {
-	f, err := os.Open("../server/index.html")
+	f, err := os.Open("../server/html/index.html")
 	if err != nil {
 		fmt.Fprint(w, err)
 	} else {

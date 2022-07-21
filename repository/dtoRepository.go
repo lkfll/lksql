@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 
-	"github.com/lkfll/lksql/analyze"
 	basesql "github.com/lkfll/lksql/baseSql"
 	"github.com/lkfll/lksql/exec"
 )
@@ -35,12 +34,11 @@ func (repository *DtoRepository) Select() *exec.Query {
 }
 
 // 增加
-func (repository *DtoRepository) InsertGo(DB *sql.DB, params ...analyze.Type) ([]sql.Result, error) {
+func (repository *DtoRepository) Insert(DB *sql.DB, params ...interface{}) ([]sql.Result, error) {
 	ret := make([]sql.Result, 0)
 	var err error = nil
 	for _, v := range repository.EntityRepositorys {
-		i := v.Insert(params...)
-		r, err := i.Go(DB)
+		r, err := v.Insert(DB, params...)
 		if err != nil {
 			return ret, err
 		}

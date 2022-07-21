@@ -25,6 +25,7 @@ func NewUpdate(sql string, param ...interface{}) func(string) *Update {
 func (Update *Update) Go(db SQLCommon, param ...interface{}) (sql.Result, error) {
 	Update.Sql = fmt.Sprint(Update.Sql, "\n", Update.SqlClause_Where, ";")
 	param = append(Update.Param, param...)
+	Hook(Update.Sql)
 	return db.Exec(Update.Sql, param...)
 }
 

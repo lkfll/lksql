@@ -23,5 +23,6 @@ func NewInsert(sql string, param ...interface{}) *Insert {
 // 执行
 func (Insert *Insert) Go(db SQLCommon) (sql.Result, error) {
 	Insert.Sql = fmt.Sprint(Insert.Sql, ";")
+	Hook(Insert.Sql)
 	return db.Exec(Insert.Sql, Insert.Param...)
 }

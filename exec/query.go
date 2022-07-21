@@ -11,18 +11,6 @@ import (
 // 扫描方法
 type ScanHandle func(...string) interface{}
 
-// go方法的钩子函数
-var Hook_QueryGoBefore func(*Query, ...interface{}) = func(query *Query, param ...interface{}) {
-	fmt.Printf("Sql: %v\n", query.Sql)
-	fmt.Printf("param: %v\n", param)
-}
-
-// go方法的钩子函数
-var Hook_QueryGoAfter func([]interface{}, error) = func(i []interface{}, err error) {
-	fmt.Printf("i: %v\n", i)
-	fmt.Printf("err: %v\n", err)
-}
-
 // 查询
 // (1) form
 // (3) join on
@@ -52,30 +40,21 @@ func NewQuery(selectSql basesql.SelectSql, scan *Scan) *Query {
 	return &ret
 }
 
-//  go 执行sql
-// 执行sql并且扫描结果
-// 将GetResult 和 Scan 合并
-func (query *Query) Go(db SQLCommon, param ...interface{}) ([]interface{}, error) {
-	query.MakeSql()
-	Hook_QueryGoBefore(query) // 钩子
-	rows, err := db.Query(query.Sql, param...)
-	if err != nil {
-		Hook_QueryGoAfter(nil, err) // 钩子
-		return nil, err
-	}
-	defer rows.Close() // 结束关闭rows
-	i, err := query.Scan(rows)
-	Hook_QueryGoAfter(i, err) // 钩子
-	return i, err
-}
-
 // 获得结果集合
 // 记得  r*sql.Rows.Close
 // 调用了 Makesql
 func (query *Query) GetResult(db SQLCommon) (*sql.Rows, error) {
 	query.MakeSql()
-
+	Hook(query.Sql)
 	return db.Query(query.Sql)
+}
+
+// 获得结果集合 通过自己传入的sql
+// 记得  r*sql.Rows.Close
+// 调用了 Makesql
+func (query *Query) GetResultBySql(db SQLCommon, sql string) (*sql.Rows, error) {
+	Hook(sql)
+	return db.Query(sql)
 }
 
 // 组合sql
@@ -187,7 +166,6 @@ func (query *Query) Having(SqlClause_Having string) *Query {
 // 设置扫描处理方法
 // 不建议直接使用
 func (query *Query) SetScanHandle(s ScanHandle) *Query {
-
 	query._scanHandle = s
 	return query
 }
@@ -202,9 +180,16 @@ func (query *Query) SetSelectField(SqlClause_Select string) func(ScanHandle) *Qu
 }
 
 // 保存节省
-func (query *Query) Save() *SaveQuery {
+func (query *Query) Go() QueryGo {
 	query.MakeSql() // 组合sql
-	var sq SaveQuery
-	sq.query = query
-	return &sq
+	return func(db SQLCommon, param ...interface{}) ([]interface{}, error) {
+		Hook(query.Sql)
+		rows, err := db.Query(query.Sql, param...)
+		if err != nil {
+			return nil, err
+		}
+		defer rows.Close() // 结束关闭rows
+		i, err := query.Scan(rows)
+		return i, err
+	}
 }
