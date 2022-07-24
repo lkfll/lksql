@@ -5,53 +5,50 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <script src="views.js"></script>
+    <script src="core.js"></script>
+    <title>index</title>
 </head>
 
 <body>
-    <dev id="1">
-        <h1>----</h1>
+
+    <dev id="1" button>
+
     </dev>
 
+    <button  onclick="test2()">sssssssssssss</button>
+    
+    <dev id="2">
+
+    </dev>
+    
 
     <script>
-        var data = new FormData();
-        data.set("table", "ssssssssssss")
-        fetch('http://127.0.0.1:8080/createTable', {
-            method: "POST",
-            body: JSON.stringify({ table: "ssssssssssss" })
-        })
-            .then(response => response.json())
-            .then(json => console.log(json))
 
-        fetch('http://127.0.0.1:8080/deseTable', {
-            method: "POST",
-            body: JSON.stringify({ table: "issues" })
-        })
-            .then(response => response.json())
-            .then(json => console.log(json))
+        let dev = document.getElementById("1")
+        let dev2 = document.getElementById("2")
 
-            fetch('http://127.0.0.1:8080/deseTables', {
-            method: "POST",
-            body: JSON.stringify(["issues", "my_student", "priority","sort"])
-        })
-            .then(response => response.json())
-            .then(json => console.log(json))
-
-        fetch('http://127.0.0.1:8080/showTables', {
-            method: "POST",
-        })
-            .then(response => response.json())
-            .then(json => console.log(json))
+        Object.Url = "http://127.0.0.1:8080/"
+        let e = {} 
+         e.Fetch("showTables").ToUl(dev)
+        function test2() { //////////////////////////
+            for (let i = 0; i < e.RespJson.length; i++) {
+                Printf(e.RespJson[i])
+                let a ={table: e.RespJson[i]}
+                a.Fetch("deseTable").ToTable(dev2)
+            }
+        }
 
 
 
-        fetch('http://127.0.0.1:8080/dropTable', {
-            method: "POST",
-            body: JSON.stringify({ table: "ssssssssssss" })
-        })
-            .then(response => response.json())
-            .then(json => console.log(json))
+        let table = { table: "ssssssssssss" }
+        table.Fetch("createTable")
+        table.PrintRespJson
+        table.Fetch("dropTable")
+         table = { table: "issues" }
+        table.Fetch("deseTable")
+        let tables = ["issues", "my_student", "priority", "sort"]
+        tables.Fetch("deseTables")
     </script>
 </body>
 

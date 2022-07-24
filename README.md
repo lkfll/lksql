@@ -1,9 +1,8 @@
 # llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
 
 反射优化
-dtoRepository insertGo 优化
-// TODO 考虑 dto包含多个entity
-外边在封装一层调用
+
+考虑外边在封装一层调用
 
 #### 介绍
 拼接sql语句

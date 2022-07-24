@@ -34,6 +34,7 @@ func (ddl *DDL) ShowTables(resp http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(resp, result.Ok(ret))
 }
 
+// ! 考虑废弃 二维数组前端不好渲染
 // 查看多个表信息
 func (ddl *DDL) DeseTables(resp http.ResponseWriter, req *http.Request) {
 	var tables []string

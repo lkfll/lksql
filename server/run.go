@@ -9,8 +9,6 @@ import (
 
 // 启动服务器
 func Run(DB *sql.DB, port string) {
-	var html controller.Html
-	http.HandleFunc("/index", html.Index)
 
 	var ddl controller.DDL
 	ddl.DB = DB
@@ -20,5 +18,7 @@ func Run(DB *sql.DB, port string) {
 	http.HandleFunc("/showTables", ddl.ShowTables)
 	http.HandleFunc("/dropTable", ddl.DropTable)
 
+	var html controller.Html
+	http.HandleFunc("/", html.Index)
 	http.ListenAndServe(":"+port, nil)
 }
